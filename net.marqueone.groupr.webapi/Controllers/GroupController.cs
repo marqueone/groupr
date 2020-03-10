@@ -45,9 +45,14 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("search")]
-        public IActionResult Search(GroupSearchQuery model)
+        public async Task<List<GroupViewModel>> Search(GroupSearchQuery model)
         {
-            return Ok();
+            var results = await _service.Search(model.Query);
+            return results.Select(r => new GroupViewModel
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
         }
     }
 }

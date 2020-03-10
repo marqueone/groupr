@@ -15,6 +15,8 @@ using Pomelo.EntityFrameworkCore.MySql.Storage;
 using net.marqueone.groupr.shared.Data;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using net.marqueone.groupr.shared.Services;
+using net.marqueone.groupr.shared.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace net.marqueone.groupr.webapi
 {
@@ -32,12 +34,26 @@ namespace net.marqueone.groupr.webapi
         {
             var connectionString = Configuration.GetConnectionString("GrouprConnection");
 
+            //-- add database contexts
             services.AddDbContext<GrouprContext>(options => 
                 options.UseMySql(connectionString, mySqlOptions => { 
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
                     mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
                 })
             );
+
+            services.AddDbContext<ApplicationDbContext>(options => 
+                options.UseMySql(connectionString, mySqlOptions => { 
+                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
+                    mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
+                })
+            );
+
+            //-- add identity 
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddControllers();
 
             services.AddScoped<IGrouprService, GrouprService>();

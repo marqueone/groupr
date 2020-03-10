@@ -6,6 +6,8 @@ using net.marqueone.groupr.shared.Data;
 using net.marqueone.groupr.shared.Models.Exceptions;
 using net.marqueone.groupr.shared.Models;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace net.marqueone.groupr.shared.Services
 {
@@ -87,12 +89,18 @@ namespace net.marqueone.groupr.shared.Services
             return results.Entity;
         }
 
+        public async Task<List<Group>> Search(string query)
+        {
+            return !string.IsNullOrWhiteSpace(query)
+                ? await _context.Groups.Where(r => r.Name.Contains(query)).ToListAsync() 
+                : await _context.Groups.ToListAsync();
+        }
+
         public async Task<Group> GetGroupByName(string name)
         {
             return await _context.Groups
                             .AsNoTracking()
                             .FirstOrDefaultAsync(r => r.NormalizedName == name.ToLower());
         }
-
     }
 }
