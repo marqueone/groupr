@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using net.marqueone.groupr.shared.Models;
 
 namespace net.marqueone.groupr.shared.Data
 {
@@ -9,5 +10,7 @@ namespace net.marqueone.groupr.shared.Data
             : base(options)
         {
         }
+
+        //public DbSet<ApplicationUser> Users { get; set; }
     }
 }

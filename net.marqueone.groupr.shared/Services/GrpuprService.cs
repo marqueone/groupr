@@ -40,7 +40,6 @@ namespace net.marqueone.groupr.shared.Services
             }
 
             //-- upsert the new group
-            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Group> results = null;
             if (model.Id == -1)
             {
                 //-- group names should be unique
@@ -50,11 +49,15 @@ namespace net.marqueone.groupr.shared.Services
                     throw new GrouprException($"Unable to add group; group already exists; {model.Name}")
                     {
                         Task = "UpsertGroup",
-                        Parameters = { {"action", "create"}, { "model", JsonConvert.SerializeObject(model) } }
+                        Parameters = { { "action", "create" }, { "model", JsonConvert.SerializeObject(model) } }
                     };
                 }
+                var group = new Group { Name = model.Name, NormalizedName = model.Name.ToLower(), CreatedBy = model.UserId, Created = DateTimeOffset.Now, Members = new List<GroupMember>() };
+                group.Members.Add(new GroupMember { UserId = model.UserId, IsAdmin = true });
+                var results = await _context.Groups.AddAsync(group);
 
-                results = await _context.Groups.AddAsync(new Group { Name = model.Name, NormalizedName = model.Name.ToLower(), CreatedBy = model.UserId, Created = DateTimeOffset.Now });
+                await _context.SaveChangesAsync();
+                return results.Entity;
             }
             else
             {
@@ -65,7 +68,7 @@ namespace net.marqueone.groupr.shared.Services
                     throw new GrouprException($"Unable to update group; group id does not exist: {model.Id}")
                     {
                         Task = "UpsertGroup",
-                        Parameters = { {"action", "update"}, { "group", JsonConvert.SerializeObject(model) } }
+                        Parameters = { { "action", "update" }, { "group", JsonConvert.SerializeObject(model) } }
                     };
                 }
 
@@ -75,7 +78,7 @@ namespace net.marqueone.groupr.shared.Services
                     throw new GrouprException($"Unable to update group; group id does not exist: {model.Id}")
                     {
                         Task = "UpsertGroup",
-                        Parameters = { {"action", "update"}, { "group", JsonConvert.SerializeObject(model) } }
+                        Parameters = { { "action", "update" }, { "group", JsonConvert.SerializeObject(model) } }
                     };
                 }
 
@@ -83,16 +86,55 @@ namespace net.marqueone.groupr.shared.Services
                 group.Name = model.Name;
                 group.Updated = DateTimeOffset.Now;
                 group.UpdatedBy = model.UserId;
+
+                await _context.SaveChangesAsync();
+                return group;
+            }
+        }
+
+        public async Task<Group> JoinGroup(JoinGroup model)
+        {
+            if (model.GroupId == 0)
+            {
+                throw new ArgumentException("Must provide a valid group id", "model.GroupId");
             }
 
+            if (string.IsNullOrWhiteSpace(model.UserId))
+            {
+                throw new ArgumentNullException(model.UserId, message: "Must provide a valid user id");
+            }
+
+            //-- make sure there is an group available, if there isn't then throw
+            //-- an exception
+            if (!await _context.Groups.AnyAsync(r => r.Id == model.GroupId))
+            {
+                throw new GrouprException($"Unable to join group; group id does not exist: {model.GroupId}")
+                {
+                    Task = "JoinGroup",
+                    Parameters = { { "group", JsonConvert.SerializeObject(model) } }
+                };
+            }
+
+            var group = await _context.Groups.FirstOrDefaultAsync(r => r.Id == model.GroupId);
+            if (group == null)
+            {
+                throw new GrouprException($"Unable to join group; group id does not exist: {model.GroupId}")
+                {
+                    Task = "JoinGroup",
+                    Parameters = { { "group", JsonConvert.SerializeObject(model) } }
+                };
+            }
+
+            // group.Members.Add(new GroupMember { UserId = model.UserId });
+            var result = await _context.GroupMemebers.AddAsync(new GroupMember { GroupId = model.GroupId, UserId = model.UserId });
             await _context.SaveChangesAsync();
-            return results.Entity;
+            return group;
         }
 
         public async Task<List<Group>> Search(string query)
         {
             return !string.IsNullOrWhiteSpace(query)
-                ? await _context.Groups.Where(r => r.Name.Contains(query)).ToListAsync() 
+                ? await _context.Groups.Where(r => r.Name.Contains(query)).ToListAsync()
                 : await _context.Groups.ToListAsync();
         }
 

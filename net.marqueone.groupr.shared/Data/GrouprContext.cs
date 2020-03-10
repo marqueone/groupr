@@ -11,5 +11,6 @@ namespace net.marqueone.groupr.shared.Data
         }
 
         public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupMember> GroupMemebers { get; set; }
     }
 }
