@@ -8,4 +8,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\net.marqueone.groupr.shared\net.marqueone.groupr.shared.csproj" />
+  </ItemGroup>
+
 </Project>
