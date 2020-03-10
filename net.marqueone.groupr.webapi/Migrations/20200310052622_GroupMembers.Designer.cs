@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using net.marqueone.groupr.shared.Data;
 
 namespace net.marqueone.groupr.webapi.Migrations
 {
     [DbContext(typeof(GrouprContext))]
-    partial class GrouprContextModelSnapshot : ModelSnapshot
+    [Migration("20200310052622_GroupMembers")]
+    partial class GroupMembers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

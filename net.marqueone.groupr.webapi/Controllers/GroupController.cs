@@ -26,9 +26,10 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("join")]
-        public IActionResult Join(JoinGroup model)
+        public async Task<bool> Join(JoinGroup model)
         {
-            return Ok();
+            var result = await _service.JoinGroup(model);
+            return true;
         }
 
         [HttpPost]

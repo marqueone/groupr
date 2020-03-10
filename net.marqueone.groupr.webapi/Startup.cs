@@ -50,7 +50,7 @@ namespace net.marqueone.groupr.webapi
             );
 
             //-- add identity 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

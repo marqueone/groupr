@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using net.marqueone.groupr.shared.Models;
 
 namespace net.marqueone.groupr.webapi.Controllers
 {
@@ -11,10 +13,14 @@ namespace net.marqueone.groupr.webapi.Controllers
     [Route("_api/[controller]")]
     public class AdminController : ControllerBase
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<AdminController> _logger;
 
-        public AdminController(ILogger<AdminController> logger)
+        public AdminController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AdminController> logger)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _logger = logger;
         }
 
@@ -46,5 +52,18 @@ namespace net.marqueone.groupr.webapi.Controllers
             return Ok();
         }
         
+        [HttpPost]
+        [Route("add-user")]
+        public async Task AddUser(NewUser model)
+        {
+            var user = new IdentityUser
+            {
+                Email = model.Email,
+                UserName = model.Email
+            };
+
+            await _userManager.CreateAsync(user);
+
+        }
     }
 }
