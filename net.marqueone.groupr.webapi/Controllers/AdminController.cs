@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using net.marqueone.groupr.shared.Models;
 using net.marqueone.groupr.shared.Services;
+using net.marqueone.groupr.shared.ViewModels;
 
 namespace net.marqueone.groupr.webapi.Controllers
 {
@@ -29,10 +30,10 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("remove-user")]
-        public async Task<bool> RemoveUser(GroupUser model)
+        public async Task<IActionResult> RemoveUser(GroupUser model)
         {
             var results = await _service.RemoveGroupUser(model);
-            return true; 
+            return Ok(); 
         }
 
         [HttpPost]
@@ -52,9 +53,10 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("list-groups")]
-        public IActionResult ListGroups()
+        public async Task<List<GroupViewModel>> ListGroups()
         {
-            return Ok();
+            var groups = await _service.ListGroups();
+            return groups.Select(r => new GroupViewModel { Id = r.Id, Name = r.Name }).ToList();
         }
         
         [HttpPost]

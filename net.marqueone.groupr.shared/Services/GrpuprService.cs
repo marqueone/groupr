@@ -8,6 +8,7 @@ using net.marqueone.groupr.shared.Models;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Collections.Generic;
+using net.marqueone.groupr.shared.ViewModels;
 
 namespace net.marqueone.groupr.shared.Services
 {
@@ -95,28 +96,17 @@ namespace net.marqueone.groupr.shared.Services
             }
         }
 
+        public async Task<List<Group>> ListGroups()
+        {
+            return await _context.Groups.ToListAsync();
+        }
+
         public async Task<List<ListUser>> GetUsers()
         {
-            var results = new List<ListUser>();
-
-
-            // var users = await (from m in _context.GroupMemebers
-            // join g in _context.Groups on m.GroupId equals g.Id
-            // join u in identityUsers on m.UserId equals u.Id
-            // select new ListUser { User = u.UserName, UserId = u.Id, Group = g.Name, GroupId = g.Id }).ToListAsync();
-
             var groups = await _context.Groups.ToListAsync();
             var users = await _identityContext.Users.ToListAsync();
 
-            foreach (var group in groups)
-            {
-                foreach (var user in group.Members)
-                {
-                    results.Add(new ListUser { Group = group.Name, GroupId = group.Id, UserId = user.UserId, User = users.First(r => r.Id == user.UserId).UserName });
-                }
-            }
-
-            return results;
+            return groups.SelectMany(group => group.Members.Select(user => new ListUser { Group = group.Name, GroupId = group.Id, UserId = user.UserId, User = users.First(r => r.Id == user.UserId).UserName })).ToList();
         }
 
         public async Task<bool> RemoveGroupUser(GroupUser model)
