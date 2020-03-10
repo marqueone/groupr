@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using net.marqueone.groupr.shared.Models;
+using net.marqueone.groupr.shared.Services;
 
 namespace net.marqueone.groupr.webapi.Controllers
 {
@@ -16,33 +17,37 @@ namespace net.marqueone.groupr.webapi.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<AdminController> _logger;
+        private readonly GrouprService _service;
 
-        public AdminController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AdminController> logger)
+        public AdminController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AdminController> logger, IGrouprService service)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _service = (GrouprService)service;
         }
 
         [HttpPost]
         [Route("remove-user")]
-        public IActionResult RemoveUser()
+        public async Task<bool> RemoveUser(GroupUser model)
         {
-            return Ok();
+            var results = await _service.RemoveGroupUser(model);
+            return true; 
         }
 
         [HttpPost]
         [Route("rename-group")]
-        public IActionResult RenameGroup()
+        public async Task<IActionResult> RenameGroup(NewGroupName model)
         {
+            var results = await _service.CreateOrUpdateGroup(new UpsertGroup { Name = model.Name, UserId = model.UserId, Id = model.GroupId});
             return Ok();
         }
 
         [HttpPost]
         [Route("list-users")]
-        public IActionResult ListUsers()
+        public async Task<List<ListUser>> ListUsers()
         {
-            return Ok();
+            return await _service.GetUsers();
         }
 
         [HttpPost]

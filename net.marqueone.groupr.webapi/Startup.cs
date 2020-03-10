@@ -36,7 +36,8 @@ namespace net.marqueone.groupr.webapi
 
             //-- add database contexts
             services.AddDbContext<GrouprContext>(options => 
-                options.UseMySql(connectionString, mySqlOptions => { 
+                options.UseLazyLoadingProxies()
+                .UseMySql(connectionString, mySqlOptions => { 
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
                     mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
                 })

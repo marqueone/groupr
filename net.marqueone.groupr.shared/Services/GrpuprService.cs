@@ -15,11 +15,13 @@ namespace net.marqueone.groupr.shared.Services
     {
         private readonly ILogger<GrouprService> _logger;
         private readonly GrouprContext _context;
+        private readonly ApplicationDbContext _identityContext;
 
-        public GrouprService(GrouprContext context, ILogger<GrouprService> logger)
+        public GrouprService(GrouprContext context, ApplicationDbContext identityContext, ILogger<GrouprService> logger)
         {
             _logger = logger;
             _context = context;
+            _identityContext = identityContext;
         }
 
         public async Task<Group> CreateOrUpdateGroup(UpsertGroup model)
@@ -84,6 +86,7 @@ namespace net.marqueone.groupr.shared.Services
 
                 //-- update the group
                 group.Name = model.Name;
+                group.NormalizedName = model.Name.ToLower();
                 group.Updated = DateTimeOffset.Now;
                 group.UpdatedBy = model.UserId;
 
@@ -92,7 +95,63 @@ namespace net.marqueone.groupr.shared.Services
             }
         }
 
-        public async Task<Group> JoinGroup(JoinGroup model)
+        public async Task<List<ListUser>> GetUsers()
+        {
+            var results = new List<ListUser>();
+
+
+            // var users = await (from m in _context.GroupMemebers
+            // join g in _context.Groups on m.GroupId equals g.Id
+            // join u in identityUsers on m.UserId equals u.Id
+            // select new ListUser { User = u.UserName, UserId = u.Id, Group = g.Name, GroupId = g.Id }).ToListAsync();
+
+            var groups = await _context.Groups.ToListAsync();
+            var users = await _identityContext.Users.ToListAsync();
+
+            foreach (var group in groups)
+            {
+                foreach (var user in group.Members)
+                {
+                    results.Add(new ListUser { Group = group.Name, GroupId = group.Id, UserId = user.UserId, User = users.First(r => r.Id == user.UserId).UserName });
+                }
+            }
+
+            return results;
+        }
+
+        public async Task<bool> RemoveGroupUser(GroupUser model)
+        {
+            if (model.GroupId == 0)
+            {
+                throw new ArgumentException("Must provide a valid group id", "model.GroupId");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.UserId))
+            {
+                throw new ArgumentNullException(model.UserId, message: "Must provide a valid user id");
+            }
+
+            //-- make sure there is an group available, if there isn't then throw
+            //-- an exception
+            if (!await _context.Groups.AnyAsync(r => r.Id == model.GroupId))
+            {
+                throw new GrouprException($"Unable to remove user from group; group id does not exist: {model.GroupId}")
+                {
+                    Task = "RemoveGroupUser",
+                    Parameters = { { "group", JsonConvert.SerializeObject(model) } }
+                };
+            }
+
+            //var group = await _context.Groups.FirstOrDefaultAsync(r => r.Id == model.GroupId);
+            var member = await _context.GroupMemebers.FirstOrDefaultAsync(r => r.GroupId == model.GroupId && r.UserId == model.UserId);
+
+            _context.GroupMemebers.Remove(member);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Group> JoinGroup(GroupUser model)
         {
             if (model.GroupId == 0)
             {
@@ -116,18 +175,9 @@ namespace net.marqueone.groupr.shared.Services
             }
 
             var group = await _context.Groups.FirstOrDefaultAsync(r => r.Id == model.GroupId);
-            if (group == null)
-            {
-                throw new GrouprException($"Unable to join group; group id does not exist: {model.GroupId}")
-                {
-                    Task = "JoinGroup",
-                    Parameters = { { "group", JsonConvert.SerializeObject(model) } }
-                };
-            }
-
-            // group.Members.Add(new GroupMember { UserId = model.UserId });
-            var result = await _context.GroupMemebers.AddAsync(new GroupMember { GroupId = model.GroupId, UserId = model.UserId });
+            group.Members.Add(new GroupMember { UserId = model.UserId });
             await _context.SaveChangesAsync();
+
             return group;
         }
 

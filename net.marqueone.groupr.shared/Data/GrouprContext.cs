@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using net.marqueone.groupr.shared.Models;
 
-namespace net.marqueone.groupr.shared.Data 
+namespace net.marqueone.groupr.shared.Data
 {
     public class GrouprContext : DbContext
     {
@@ -12,5 +12,10 @@ namespace net.marqueone.groupr.shared.Data
 
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMemebers { get; set; }
+
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<Group>().HasMany(r => r.Members).WithOne();
+        // }
     }
 }
