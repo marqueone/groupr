@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using net.marqueone.groupr.shared.Models;
+
 namespace net.marqueone.groupr.webapi.Controllers
 {
     [ApiController]
@@ -20,21 +22,21 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("join")]
-        public IActionResult Join()
+        public IActionResult Join(JoinGroup model)
         {
             return Ok();
         }
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create()
+        public IActionResult Create(CreateGroup model)
         {
             return Ok();
         }
 
         [HttpPost]
         [Route("search")]
-        public IActionResult Search(string query)
+        public IActionResult Search(GroupSearchQuery model)
         {
             return Ok();
         }
