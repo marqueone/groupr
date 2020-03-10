@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using net.marqueone.groupr.shared.Data;
 
 namespace net.marqueone.groupr.webapi.Migrations
 {
     [DbContext(typeof(GrouprContext))]
-    partial class GrouprContextModelSnapshot : ModelSnapshot
+    [Migration("20200310035133_GroupUpdate")]
+    partial class GroupUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,15 +30,9 @@ namespace net.marqueone.groupr.webapi.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("varchar(400) CHARACTER SET utf8mb4")
-                        .HasMaxLength(400);
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
@@ -45,8 +41,7 @@ namespace net.marqueone.groupr.webapi.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("varchar(400) CHARACTER SET utf8mb4")
-                        .HasMaxLength(400);
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 

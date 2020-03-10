@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/net.marqueone.groupr.webapi.csproj",
+                "${workspaceFolder}/net.marqueone.groupr.webapi/net.marqueone.groupr.webapi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/net.marqueone.groupr.webapi.csproj",
+                "${workspaceFolder}/net.marqueone.groupr.webapi/net.marqueone.groupr.webapi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/net.marqueone.groupr.webapi.csproj",
+                "${workspaceFolder}/net.marqueone.groupr.webapi/net.marqueone.groupr.webapi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using net.marqueone.groupr.shared.Models;
+using net.marqueone.groupr.shared.ViewModels;
+using net.marqueone.groupr.shared.Services;
 
 namespace net.marqueone.groupr.webapi.Controllers
 {
@@ -14,10 +16,12 @@ namespace net.marqueone.groupr.webapi.Controllers
     public class GroupController : ControllerBase
     {
         private readonly ILogger<GroupController> _logger;
+        private readonly GrouprService _service;
 
-        public GroupController(ILogger<GroupController> logger)
+        public GroupController(ILogger<GroupController> logger, IGrouprService service)
         {
             _logger = logger;
+            _service = (GrouprService)service;
         }
 
         [HttpPost]
@@ -29,9 +33,14 @@ namespace net.marqueone.groupr.webapi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create(CreateGroup model)
+        public async Task<GroupViewModel> Create(CreateGroup model)
         {
-            return Ok();
+            var result = await _service.CreateOrUpdateGroup(new UpsertGroup { Name = model.Name, UserId = model.UserId });
+            return new GroupViewModel
+            {
+                Id = result.Id,
+                Name = result.Name
+            };
         }
 
         [HttpPost]

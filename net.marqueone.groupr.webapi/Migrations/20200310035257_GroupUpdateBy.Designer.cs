@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using net.marqueone.groupr.shared.Data;
 
 namespace net.marqueone.groupr.webapi.Migrations
 {
     [DbContext(typeof(GrouprContext))]
-    partial class GrouprContextModelSnapshot : ModelSnapshot
+    [Migration("20200310035257_GroupUpdateBy")]
+    partial class GroupUpdateBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,11 +34,6 @@ namespace net.marqueone.groupr.webapi.Migrations
                         .HasMaxLength(400);
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);

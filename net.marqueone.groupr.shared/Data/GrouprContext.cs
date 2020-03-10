@@ -10,6 +10,6 @@ namespace net.marqueone.groupr.shared.Data
         {
         }
 
-        DbSet<Group> Groups { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

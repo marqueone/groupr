@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using net.marqueone.groupr.shared.Data;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using net.marqueone.groupr.shared.Services;
 
 namespace net.marqueone.groupr.webapi
 {
@@ -29,16 +30,17 @@ namespace net.marqueone.groupr.webapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddDbContext<GrouprContext>(options =>
-            //         options.UseMy(Configuration.GetConnectionString("DefaultConnection"),
-            //         b => b.MigrationsAssembly("net.marqueone.childdata.api")));
+            var connectionString = Configuration.GetConnectionString("GrouprConnection");
+
             services.AddDbContext<GrouprContext>(options => 
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions => { 
+                options.UseMySql(connectionString, mySqlOptions => { 
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
                     mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
                 })
             );
             services.AddControllers();
+
+            services.AddScoped<IGrouprService, GrouprService>();
 
             services.AddSwaggerGen(c =>
             {
