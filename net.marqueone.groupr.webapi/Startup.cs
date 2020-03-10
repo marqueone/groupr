@@ -17,6 +17,7 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using net.marqueone.groupr.shared.Services;
 using net.marqueone.groupr.shared.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace net.marqueone.groupr.webapi
 {
@@ -59,6 +60,11 @@ namespace net.marqueone.groupr.webapi
 
             services.AddScoped<IGrouprService, GrouprService>();
 
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "client-app/build";
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -86,6 +92,16 @@ namespace net.marqueone.groupr.webapi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "client-app";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }
