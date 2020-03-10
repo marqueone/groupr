@@ -1,0 +1,1 @@
+export type Localization = { [index: string]: string }

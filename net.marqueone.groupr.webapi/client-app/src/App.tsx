@@ -1,26 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import { IntlProvider } from 'react-intl';
+import AppLocale from "./constants/index";
+
+import { Localize } from "./helpers";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
 
-      </header>
-    </div>
+  const locale = localStorage.getItem("locale") as string
+  const currentLocalization = AppLocale[locale];
+
+  return (
+    <IntlProvider
+      locale={locale}
+      messages={currentLocalization}
+    >
+      <div>
+        <header>
+          {/* Fixed navbar */}
+          <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a className="navbar-brand" href="#">Fixed navbar</a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon" />
+            </button>
+            <div className="collapse navbar-collapse" id="navbarCollapse">
+              <ul className="navbar-nav mr-auto">
+                <li className="nav-item active">
+                  <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#">Link</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link disabled" href="#">Disabled</a>
+                </li>
+              </ul>
+              <form className="form-inline mt-2 mt-md-0">
+                <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
+                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </div>
+          </nav>
+        </header>
+        {/* Begin page content */}
+        <main role="main" className="container">
+          <h1 className="mt-5">Sticky footer with fixed navbar</h1>
+          <p className="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
+          <p>Back to <a href="../sticky-footer/">the default sticky footer</a> minus the navbar.</p>
+        </main>
+        <footer className="footer">
+          <div className="container">
+            <span className="text-muted"><Localize id="general.copyright" /></span>
+          </div>
+        </footer>
+      </div>
+
+    </IntlProvider>
   );
 }
 
