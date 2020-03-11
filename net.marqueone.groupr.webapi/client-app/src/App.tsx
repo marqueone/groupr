@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { IntlProvider } from 'react-intl';
 import AppLocale from "./constants/index";
@@ -6,18 +6,15 @@ import AppLocale from "./constants/index";
 import { Footer } from 'components/layout/footer';
 import { Localize, GetLocalizedMessage } from 'helpers';
 import { Header } from 'components/layout/header';
-
-interface Group {
-  id: number
-  name: string
-}
+import GroupList from "components/group-list";
+import { Group } from "types"
 
 function App() {
 
   const locale = localStorage.getItem("locale") as string
   const currentLocalization = AppLocale[locale];
 
-  const groups: Array<Group> = [{ id: 1, name: "one" }, { id: 2, name: "two" }, { id: 3, name: "three" }, { id: 4, name: "four" },]
+  const groups: Array<Group> = [{ id: 1, name: "one" }, { id: 2, name: "two" }, { id: 3, name: "three" }, { id: 4, name: "four" }, { id: 5, name: "five" }, { id: 6, name: "six", description: "moooooooooo" }, { id: 7, name: "seven", description: "this is an actual description, hey look at meeee!" },]
 
   return (
     <IntlProvider
@@ -35,12 +32,8 @@ function App() {
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce pellentesque diam vitae auctor pellentesque. Donec eu sapien non diam pulvinar condimentum a et ipsum. Aenean turpis libero, pulvinar at sem ac, cursus dignissim leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed id sollicitudin justo, vel tincidunt nulla. Duis tristique sodales viverra. Sed ut felis at neque dignissim sagittis. Sed sed faucibus ligula, eget luctus quam. Maecenas vitae posuere purus. Nulla in egestas dolor. Sed nisl arcu, congue vel nisl nec, blandit facilisis metus.</p>
 
         <h2 className="item_title_no_image">My Groups<span className="b2t_link">Create New Group</span></h2>
-        
-        <div>View: <i className="fas fa-list"></i> | <i className="fas fa-th-large"></i></div>
 
-        <ul>
-          {groups.map(item => <li key={item.id}>{item.name}</li>)}
-        </ul>
+        <GroupList items={groups} />       
 
         <div>Join Group</div>
 
@@ -51,3 +44,7 @@ function App() {
 }
 
 export default App;
+
+const GroupListItem: FC<Group> = ({ id, name, description }) => {
+  return (<div></div>);
+}

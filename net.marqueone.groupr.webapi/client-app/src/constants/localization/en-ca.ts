@@ -5,6 +5,7 @@ const localization: Record<string, string>  = {
     "general.copyright": "marqueone © 2019 AOT - Test",
     "general.name": "groupr",
     "general.search": "Search",
+    "general.no-description": "No Description",
     
     //-- 
     //-- admin labels
