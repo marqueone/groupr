@@ -3,58 +3,49 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import AppLocale from "./constants/index";
 
-import { Localize } from "./helpers";
+import { Footer } from 'components/layout/footer';
+import { Localize, GetLocalizedMessage } from 'helpers';
+import { Header } from 'components/layout/header';
+
+interface Group {
+  id: number
+  name: string
+}
 
 function App() {
 
   const locale = localStorage.getItem("locale") as string
   const currentLocalization = AppLocale[locale];
 
+  const groups: Array<Group> = [{ id: 1, name: "one" }, { id: 2, name: "two" }, { id: 3, name: "three" }, { id: 4, name: "four" },]
+
   return (
     <IntlProvider
       locale={locale}
       messages={currentLocalization}
     >
-      <div>
-        <header>
-          {/* Fixed navbar */}
-          <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a className="navbar-brand" href="#">Fixed navbar</a>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon" />
-            </button>
-            <div className="collapse navbar-collapse" id="navbarCollapse">
-              <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
-                  <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Link</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link disabled" href="#">Disabled</a>
-                </li>
-              </ul>
-              <form className="form-inline mt-2 mt-md-0">
-                <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-            </div>
-          </nav>
-        </header>
-        {/* Begin page content */}
-        <main role="main" className="container">
-          <h1 className="mt-5">Sticky footer with fixed navbar</h1>
-          <p className="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-          <p>Back to <a href="../sticky-footer/">the default sticky footer</a> minus the navbar.</p>
-        </main>
-        <footer className="footer">
-          <div className="container">
-            <span className="text-muted"><Localize id="general.copyright" /></span>
-          </div>
-        </footer>
-      </div>
+      <Header />
+      {/* Begin page content */}
+      <main role="main" className="container" style={{ marginTop: "12px", marginBottom: "12px", paddingTop: "75px" }}>
+        {/* <h1 className="mt-5">Sticky footer with fixed navbar</h1>
+        <p className="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
+        <p>Back to <a href="../sticky-footer/">the default sticky footer</a> minus the navbar.</p> */}
 
+        <h1>Welcome to Groupr</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce pellentesque diam vitae auctor pellentesque. Donec eu sapien non diam pulvinar condimentum a et ipsum. Aenean turpis libero, pulvinar at sem ac, cursus dignissim leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed id sollicitudin justo, vel tincidunt nulla. Duis tristique sodales viverra. Sed ut felis at neque dignissim sagittis. Sed sed faucibus ligula, eget luctus quam. Maecenas vitae posuere purus. Nulla in egestas dolor. Sed nisl arcu, congue vel nisl nec, blandit facilisis metus.</p>
+
+        <h2 className="item_title_no_image">My Groups<span className="b2t_link">Create New Group</span></h2>
+        
+        <div>View: <i className="fas fa-list"></i> | <i className="fas fa-th-large"></i></div>
+
+        <ul>
+          {groups.map(item => <li key={item.id}>{item.name}</li>)}
+        </ul>
+
+        <div>Join Group</div>
+
+      </main>
+      <Footer />
     </IntlProvider>
   );
 }

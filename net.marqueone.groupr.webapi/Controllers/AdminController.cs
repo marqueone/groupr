@@ -56,7 +56,7 @@ namespace net.marqueone.groupr.webapi.Controllers
         public async Task<List<GroupViewModel>> ListGroups()
         {
             var groups = await _service.ListGroups();
-            return groups.Select(r => new GroupViewModel { Id = r.Id, Name = r.Name }).ToList();
+            return groups.Select(r => new GroupViewModel { Id = r.Id, Name = r.Name, Description = r.Description }).ToList();
         }
         
         [HttpPost]

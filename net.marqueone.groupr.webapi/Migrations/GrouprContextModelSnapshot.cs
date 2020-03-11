@@ -31,6 +31,10 @@ namespace net.marqueone.groupr.webapi.Migrations
                         .HasColumnType("varchar(400) CHARACTER SET utf8mb4")
                         .HasMaxLength(400);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasMaxLength(1024);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")

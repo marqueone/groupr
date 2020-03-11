@@ -55,7 +55,7 @@ namespace net.marqueone.groupr.shared.Services
                         Parameters = { { "action", "create" }, { "model", JsonConvert.SerializeObject(model) } }
                     };
                 }
-                var group = new Group { Name = model.Name, NormalizedName = model.Name.ToLower(), CreatedBy = model.UserId, Created = DateTimeOffset.Now, Members = new List<GroupMember>() };
+                var group = new Group { Name = model.Name, NormalizedName = model.Name.ToLower(), Description = model.Description, CreatedBy = model.UserId, Created = DateTimeOffset.Now, Members = new List<GroupMember>() };
                 group.Members.Add(new GroupMember { UserId = model.UserId, IsAdmin = true });
                 var results = await _context.Groups.AddAsync(group);
 

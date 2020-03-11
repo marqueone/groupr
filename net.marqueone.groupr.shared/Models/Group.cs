@@ -22,6 +22,10 @@ namespace net.marqueone.groupr.shared.Models
         public string NormalizedName { get; set; }
 
         [Column]
+        [MaxLength(1024)]
+        public string Description { get; set; }
+
+        [Column]
         [Required]
         public DateTimeOffset Created { get; set; }
 
