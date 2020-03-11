@@ -15,6 +15,7 @@ export default class GroupList extends PureComponent<{ items: Array<Group> }, {}
     }
 
     render() {
+        console.log(this.props);
         const { view } = this.state;
         return (
             <Fragment>

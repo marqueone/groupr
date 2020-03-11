@@ -6,7 +6,26 @@ const localization: Record<string, string>  = {
     "general.name": "groupr",
     "general.search": "Search",
     "general.no-description": "No Description",
-    
+    "general.title": "Welcome to Groupr",
+    "general.description": "Groupr allows you to create, and join any number of groups created by users!",
+    "general.my-groups": "My Groups",
+    "general.create-group":"Create Group",
+    "general.view": "View",
+    "general.join-group": "Join Group",
+    "general.cancel": "Cancel",
+    "general.label.name": "Name",
+    "general.label.description": "Description",
+
+    "create.title": "Create Group",
+    "create.description": "Create a new group for users to join!",
+    "create": "Create",
+
+
+    "error.name": "Name is a required field",
+    "error.name.length": "Name can't be any larger than 64 characters",
+    "error.description.length": "Description can't be any larger than 256 characters",
+
+
     //-- 
     //-- admin labels
     //-- 

@@ -36,12 +36,20 @@ namespace net.marqueone.groupr.webapi.Controllers
         [Route("create")]
         public async Task<GroupViewModel> Create(CreateGroup model)
         {
-            var result = await _service.CreateOrUpdateGroup(new UpsertGroup { Name = model.Name, UserId = model.UserId });
-            return new GroupViewModel
+            try
             {
-                Id = result.Id,
-                Name = result.Name
-            };
+                var result = await _service.CreateOrUpdateGroup(new UpsertGroup { Name = model.Name, UserId = model.UserId, Description = model.Description });
+                return new GroupViewModel
+                {
+                    Id = result.Id,
+                    Name = result.Name,
+                    Description = result.Description
+                };
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         [HttpPost]
