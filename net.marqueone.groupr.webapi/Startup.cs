@@ -36,18 +36,20 @@ namespace net.marqueone.groupr.webapi
             var connectionString = Configuration.GetConnectionString("GrouprConnection");
 
             //-- add database contexts
-            services.AddDbContext<GrouprContext>(options => 
+            services.AddDbContext<GrouprContext>(options =>
                 options.UseLazyLoadingProxies()
-                .UseMySql(connectionString, mySqlOptions => { 
-                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
-                    mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
+                .UseMySql(connectionString, mySqlOptions =>
+                {
+                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql));
+                    mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi");
                 })
             );
 
-            services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseMySql(connectionString, mySqlOptions => { 
-                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql)); 
-                    mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi"); 
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySql(connectionString, mySqlOptions =>
+                {
+                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql));
+                    mySqlOptions.MigrationsAssembly("net.marqueone.groupr.webapi");
                 })
             );
 
@@ -56,7 +58,9 @@ namespace net.marqueone.groupr.webapi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddScoped<IGrouprService, GrouprService>();
 

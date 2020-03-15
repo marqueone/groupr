@@ -8,7 +8,6 @@ using net.marqueone.groupr.shared.Models;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Collections.Generic;
-using net.marqueone.groupr.shared.ViewModels;
 
 namespace net.marqueone.groupr.shared.Services
 {
@@ -157,6 +156,8 @@ namespace net.marqueone.groupr.shared.Services
             //-- an exception
             if (!await _context.Groups.AnyAsync(r => r.Id == model.GroupId))
             {
+                string serialized = JsonConvert.SerializeObject(model);
+
                 throw new GrouprException($"Unable to join group; group id does not exist: {model.GroupId}")
                 {
                     Task = "JoinGroup",

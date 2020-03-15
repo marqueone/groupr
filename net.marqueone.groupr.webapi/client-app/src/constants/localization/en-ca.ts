@@ -19,6 +19,8 @@ const localization: Record<string, string>  = {
     "create.title": "Create Group",
     "create.description": "Create a new group for users to join!",
     "create": "Create",
+    "create.success.title": "Group Created!",
+    "create.success.description": "Your Group: ${payload.name} was successfuly created",
 
 
     "error.name": "Name is a required field",

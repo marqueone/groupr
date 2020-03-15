@@ -5,28 +5,32 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { GetLocalizedMessage } from "helpers";
 import axios from "axios";
-
+import swal from "sweetalert";
 
 class CreateGroup extends PureComponent {
     onSubmit = (data: any) => {
-debugger;
+        debugger;
         const payload = {
             name: data.name,
             description: data.description,
             userId: "e561a1b8-c520-4505-b675-8c1eefabfea0"
         }
 
-        axios({
-            method: 'post',
-            url: '/_api/group/create',
-            data: payload,
-        })
+        axios({ method: 'post', url: '/_api/group/create', data: payload })
             .then(function (response) {
-                //handle success
-                console.log(response);
+                if(response.status === 200){
+                    let test = GetLocalizedMessage('create.success.description');
+                    debugger;
+                    swal({
+                        title: GetLocalizedMessage("create.success.title"),
+                        text: eval(test),
+                        icon: "success",
+                        timer: 2000,
+                      })
+                }
             })
             .catch(function (response) {
-                //handle error
+
                 console.log(response);
             });
     }
@@ -49,7 +53,7 @@ debugger;
                         validationSchema={validationSchema}
                         onSubmit={(data, { setSubmitting }) => {
                             setSubmitting(true);
-                            
+
                             this.onSubmit(data);
 
                             setSubmitting(false);

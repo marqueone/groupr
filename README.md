@@ -18,3 +18,5 @@ dotnet add package Pomelo.EntityFrameworkCore.MySql --version 3.1.1
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 3.1.2
 dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore --version 3.1.2
 dotnet add package Microsoft.AspNetCore.SpaServices.Extensions --version 3.1.2
+dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 3.1.2
+dotnet add package Newtonsoft.Json --version 12.0.3
