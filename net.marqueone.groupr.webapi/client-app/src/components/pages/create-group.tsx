@@ -19,11 +19,10 @@ class CreateGroup extends PureComponent {
         axios({ method: 'post', url: '/_api/group/create', data: payload })
             .then(function (response) {
                 if(response.status === 200){
-                    let test = GetLocalizedMessage('create.success.description');
-                    debugger;
+
                     swal({
                         title: GetLocalizedMessage("create.success.title"),
-                        text: eval(test),
+                        text: GetLocalizedMessage('create.success.description'),
                         icon: "success",
                         timer: 2000,
                       })
